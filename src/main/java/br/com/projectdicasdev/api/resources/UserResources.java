@@ -1,5 +1,8 @@
 package br.com.projectdicasdev.api.resources;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +30,13 @@ public class UserResources {
 		return ResponseEntity.ok().body(mapper.map(service.findById(id),UserDTO.class));
 	}
 	
+	@GetMapping
+	public ResponseEntity<List<UserDTO>> findAll(){
+//		List<User> listUser = service.findAll();
+//		List<UserDTO> listDTO = listUser.stream().map(x -> mapper.map(x, UserDTO.class)).collect(Collectors.toList());
+//		List<UserDTO> listDTO = service.findAll().stream().map(x -> mapper.map(x, UserDTO.class)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(service.findAll()
+				.stream().map(x -> mapper.map(x, UserDTO.class)).collect(Collectors.toList()));
+	}
 	
 }
