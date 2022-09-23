@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 	//Criando um método para averiguar se já existe o email!(Método interno)
 	private void findByEmail(UserDTO obj) {
 		Optional<User> user = userRepository.findByEmail(obj.getEmail());
-		if(user.isPresent() && user.get().equals(obj.getId())) {
+		if(user.isPresent() && !user.get().getId().equals(obj.getId())) {
 			 throw new DataIntegratyViolationException("já existe este email cadastrado");
 		}
 	}
