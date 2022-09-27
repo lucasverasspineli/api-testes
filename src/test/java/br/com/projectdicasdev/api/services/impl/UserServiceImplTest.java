@@ -2,21 +2,22 @@ package br.com.projectdicasdev.api.services.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.fasterxml.jackson.core.sym.Name;
 
 import br.com.projectdicasdev.api.domain.User;
 import br.com.projectdicasdev.api.domain.dto.UserDTO;
@@ -26,6 +27,8 @@ import br.com.projectdicasdev.api.services.exceptions.ObjectNotFoundException;
 @SpringBootTest
 class UserServiceImplTest {
 	
+	private static final int INDEX = 0;
+
 	private static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
 
 	private static final Integer ID = 1;
@@ -91,11 +94,22 @@ class UserServiceImplTest {
 		
 	}
 
-//	@Test
-//	void testFindAll() {
-//		fail("Not yet implemented");
-//	}
-//
+	@Test
+	void whenFindAllThenReturnAnListOfUsers() {
+		when(userRepository.findAll()).thenReturn(List.of(user));
+		
+		List<User> listUser = service.findAll();
+		assertNotNull(listUser);
+		//Assegurando que o tamanho da Lista seja 1, já que foi adicionado só um Usuário
+		assertEquals(1, listUser.size());
+		//Assegurando que o índice 0 da Lista seja da Classe User
+		assertEquals(User.class, listUser.get(INDEX).getClass());
+		assertEquals(ID, listUser.get(INDEX).getId());
+		assertEquals(NAME, listUser.get(INDEX).getName());
+		assertEquals(EMAIL, listUser.get(INDEX).getEmail());
+		assertEquals(PASSWORD, listUser.get(INDEX).getPassword());
+	}
+
 //	@Test
 //	void testCreate() {
 //		fail("Not yet implemented");
