@@ -2,6 +2,7 @@ package br.com.projectdicasdev.api.services.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -110,11 +111,20 @@ class UserServiceImplTest {
 		assertEquals(PASSWORD, listUser.get(INDEX).getPassword());
 	}
 
-//	@Test
-//	void testCreate() {
-//		fail("Not yet implemented");
-//	}
-//
+	@Test
+	void whenCreateThenReturnSucess() {
+		when(userRepository.save(any())).thenReturn(user);
+		
+		User response = service.create(userDTO);
+		
+		assertNotNull(response);
+		assertEquals(User.class, response.getClass());
+		assertEquals(ID, response.getId());
+		assertEquals(NAME, response.getName());
+		assertEquals(EMAIL, response.getEmail());
+		assertEquals(PASSWORD, response.getPassword());
+	}
+
 //	@Test
 //	void testUpdate() {
 //		fail("Not yet implemented");
