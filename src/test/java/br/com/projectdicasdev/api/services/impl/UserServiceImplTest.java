@@ -21,10 +21,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import br.com.projectdicasdev.api.domain.User;
 import br.com.projectdicasdev.api.domain.dto.UserDTO;
 import br.com.projectdicasdev.api.repository.UserRepository;
+import br.com.projectdicasdev.api.services.exceptions.ObjectNotFoundException;
 
 @SpringBootTest
 class UserServiceImplTest {
 	
+	private static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
+
 	private static final Integer ID = 1;
 	
 	private static final String NAME = "Lucas";
@@ -51,6 +54,7 @@ class UserServiceImplTest {
 	
 	private Optional<User> optionalUser;
 	
+	
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this); 
@@ -67,36 +71,50 @@ class UserServiceImplTest {
 		
 		
 		assertNotNull(response);
-		assertEquals(User.class,response.getClass());
+		assertEquals(User.class, response.getClass());
 		assertEquals(ID, response.getId());
 		assertEquals(NAME, response.getName());
 		assertEquals(EMAIL, response.getEmail());
 	}
-
+	       
 	@Test
-	void testFindAll() {
-		fail("Not yet implemented");
+	void whenFindByIdThenReturnAnObjectNotFoundException() {
+		when(userRepository.findById(anyInt())).thenThrow(new ObjectNotFoundException(OBJETO_NAO_ENCONTRADO));
+		
+		try {
+			 service.findById(ID);
+		} catch (Exception ex) {
+			assertEquals(ObjectNotFoundException.class, ex.getClass());
+			assertEquals(OBJETO_NAO_ENCONTRADO, ex.getMessage());
+			
+		}
+		
 	}
 
-	@Test
-	void testCreate() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testUpdate() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testAtualizar() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testDelete() {
-		fail("Not yet implemented");
-	}
+//	@Test
+//	void testFindAll() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	void testCreate() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	void testUpdate() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	void testAtualizar() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	void testDelete() {
+//		fail("Not yet implemented");
+//	}
 	
 	private void startUser() {
 		user = new User(ID, NAME, EMAIL, PASSWORD);
