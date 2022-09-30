@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.core.sym.Name;
 import br.com.projectdicasdev.api.domain.User;
 import br.com.projectdicasdev.api.domain.dto.UserDTO;
 import br.com.projectdicasdev.api.repository.UserRepository;
+import br.com.projectdicasdev.api.services.exceptions.DataIntegratyViolationException;
 import br.com.projectdicasdev.api.services.exceptions.ObjectNotFoundException;
 
 @SpringBootTest
@@ -125,6 +127,22 @@ class UserServiceImplTest {
 		assertEquals(PASSWORD, response.getPassword());
 	}
 
+	
+	@Test
+	void whenCreateThenReturnAnDataIntegratyViolationException() {
+		when(userRepository.findByEmail(anyString())).thenReturn(optionalUser);
+		
+		try {
+			//Alterar ID para ser validade na Exception
+			 optionalUser.get().setId(2);
+			 service.create(userDTO);
+		} catch (Exception ex) {
+			assertEquals(DataIntegratyViolationException.class, ex.getClass());
+			assertEquals("já existe este email cadastrado", ex.getMessage());
+		}
+	}
+	
+	
 //	@Test
 //	void testUpdate() {
 //		fail("Not yet implemented");
