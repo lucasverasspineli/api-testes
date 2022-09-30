@@ -159,19 +159,19 @@ class UserServiceImplTest {
 		assertEquals(PASSWORD, response.getPassword());
 	}
 	
-//	@Test
-//	void whenUpdateThenReturnAnDataIntegratyViolationException() {
-//		when(userRepository.findByEmail(anyString())).thenReturn(optionalUser);
-//		
-//		try {
-//			//Alterar ID para ser validade na Exception
-//			 optionalUser.get().setId(2);
-//			 service.create(userDTO);
-//		} catch (Exception ex) {
-//			assertEquals(DataIntegratyViolationException.class, ex.getClass());
-//			assertEquals(JA_EXISTE_ESTE_EMAIL_CADASTRADO, ex.getMessage());
-//		}
-//	}
+	@Test
+	void whenUpdateThenReturnAnDataIntegratyViolationException() {
+		when(userRepository.findByEmail(anyString())).thenReturn(optionalUser);
+		
+		try {
+			//Alterar ID para ser validade na Exception
+			 optionalUser.get().setId(2);
+			 service.create(userDTO);
+		} catch (Exception ex) {
+			assertEquals(DataIntegratyViolationException.class, ex.getClass());
+			assertEquals(JA_EXISTE_ESTE_EMAIL_CADASTRADO, ex.getMessage());
+		}
+	}
 	
 //	@Test
 //	void testDelete() {
