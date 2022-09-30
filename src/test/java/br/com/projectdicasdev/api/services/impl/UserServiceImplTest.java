@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -135,7 +138,7 @@ class UserServiceImplTest {
 		when(userRepository.findByEmail(anyString())).thenReturn(optionalUser);
 		
 		try {
-			//Alterar ID para ser validade na Exception
+			//Alterar ID para ser validado na Exception
 			 optionalUser.get().setId(2);
 			 service.create(userDTO);
 		} catch (Exception ex) {
@@ -164,7 +167,7 @@ class UserServiceImplTest {
 		when(userRepository.findByEmail(anyString())).thenReturn(optionalUser);
 		
 		try {
-			//Alterar ID para ser validade na Exception
+			//Alterar ID para ser validado na Exception
 			 optionalUser.get().setId(2);
 			 service.create(userDTO);
 		} catch (Exception ex) {
@@ -173,10 +176,15 @@ class UserServiceImplTest {
 		}
 	}
 	
-//	@Test
-//	void testDelete() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	void deleteWithSuccess() {
+		when(userRepository.findById(anyInt())).thenReturn(optionalUser);
+		//Faz nada quando o objeto repository no método deleteById passar qualquer valor inteiro. 
+		doNothing().when(userRepository).deleteById(anyInt());
+		service.delete(ID);
+		verify(userRepository, times(1)).deleteById(anyInt());
+		
+	}
 	
 	private void startUser() {
 		user = new User(ID, NAME, EMAIL, PASSWORD);
