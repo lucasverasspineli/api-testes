@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 		findByEmail(obj);
 		return userRepository.save(mapper.map(obj, User.class));
 	}
-	
+
 	//Criando um método para averiguar se já existe o email!(Método interno)
 	private void findByEmail(UserDTO obj) {
 		Optional<User> user = userRepository.findByEmail(obj.getEmail());
