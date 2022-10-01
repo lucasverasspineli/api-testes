@@ -1,25 +1,25 @@
 package br.com.projectdicasdev.api.resources;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import br.com.projectdicasdev.api.domain.User;
 import br.com.projectdicasdev.api.domain.dto.UserDTO;
@@ -55,6 +55,7 @@ class UserResourcesTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
+		solvedErrorServletRequestAttributes();
 		startInstance();
 	}
 
@@ -76,7 +77,6 @@ class UserResourcesTest {
 		assertEquals(NAME, response.getBody().getName());
 		assertEquals(EMAIL, response.getBody().getEmail());
 		assertEquals(PASSWORD, response.getBody().getPassword());
-
 	}
 
 	@Test
@@ -99,14 +99,19 @@ class UserResourcesTest {
 		assertEquals(NAME, listaUserDTO.getBody().get(INDEX).getName());
 		assertEquals(EMAIL, listaUserDTO.getBody().get(INDEX).getEmail());
 		assertEquals(PASSWORD, listaUserDTO.getBody().get(INDEX).getPassword());
-
 	}
 
-//	@Test
-//	void testCreate() {
-//		fail("Not yet implemented");
-//	}
-//
+	@Test
+	void whenCreateThenReturnCreated() {
+		when(service.create(any())).thenReturn(user);
+		ResponseEntity<UserDTO> response = resource.create(userDTO);
+		
+		assertEquals(ResponseEntity.class, response.getClass());
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+//		Assegurando que o Headers tenha chave location, que representa o URI do acesso ao novo objeto 
+		assertNotNull(response.getHeaders().get("Location"));
+	}
+
 //	@Test
 //	void testAtualizar() {
 //		fail("Not yet implemented");
@@ -126,5 +131,10 @@ class UserResourcesTest {
 		user = new User(ID, NAME, EMAIL, PASSWORD);
 		userDTO = new UserDTO(ID, NAME, EMAIL, PASSWORD);
 	}
-
+	
+	private void solvedErrorServletRequestAttributes() {
+		MockHttpServletRequest mockRequest = new MockHttpServletRequest();
+		ServletRequestAttributes requestAttributes = new ServletRequestAttributes(mockRequest);
+		RequestContextHolder.setRequestAttributes(requestAttributes);
+	}
 }

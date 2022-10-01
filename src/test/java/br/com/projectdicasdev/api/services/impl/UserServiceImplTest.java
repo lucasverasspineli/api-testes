@@ -76,10 +76,7 @@ class UserServiceImplTest {
 	void whenFindByIdThenReturnAnUserInstance() {
 		when(userRepository.findById(anyInt())).thenReturn(optionalUser);
 		
-		
-		
 		User response = service.findById(ID);
-		
 		
 		assertNotNull(response);
 		assertEquals(User.class, response.getClass());
@@ -97,7 +94,6 @@ class UserServiceImplTest {
 		} catch (Exception ex) {
 			assertEquals(ObjectNotFoundException.class, ex.getClass());
 			assertEquals(OBJETO_NAO_ENCONTRADO, ex.getMessage());
-			
 		}
 		
 	}
@@ -183,7 +179,6 @@ class UserServiceImplTest {
 		doNothing().when(userRepository).deleteById(anyInt());
 		service.delete(ID);
 		verify(userRepository, times(1)).deleteById(anyInt());
-		
 	}
 	
 	@Test
