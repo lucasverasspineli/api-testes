@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -105,7 +108,7 @@ class UserResourcesTest {
 	void whenCreateThenReturnCreated() {
 		when(service.create(any())).thenReturn(user);
 		ResponseEntity<UserDTO> response = resource.create(userDTO);
-		
+
 		assertEquals(ResponseEntity.class, response.getClass());
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 //		Assegurando que o Headers tenha chave location, que representa o URI do acesso ao novo objeto 
@@ -116,36 +119,36 @@ class UserResourcesTest {
 	void whenUpdateThenReturnSucess() {
 		when(service.update(userDTO)).thenReturn(user);
 		when(mapper.map(any(), any())).thenReturn(userDTO);
-		
+
 		ResponseEntity<UserDTO> response = resource.atualizar(ID, userDTO);
-		
+
 		assertNotNull(response);
 		assertNotNull(response.getBody());
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(ResponseEntity.class, response.getClass());
 		assertEquals(UserDTO.class, response.getBody().getClass());
-		
-		
+
 		assertEquals(ID, response.getBody().getId());
 		assertEquals(NAME, response.getBody().getName());
 		assertEquals(EMAIL, response.getBody().getEmail());
 	}
 
-//	@Test
-//	void testAtualizacao() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	void testDelete() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	void whenDeleteThenReturnSucess() {
+		doNothing().when(service).delete(anyInt());
+		ResponseEntity<UserDTO> response = resource.delete(ID);
+
+		assertNotNull(response);
+		assertEquals(ResponseEntity.class, response.getClass());
+		verify(service, times(1)).delete(any());
+		assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+	}
 
 	private void startInstance() {
 		user = new User(ID, NAME, EMAIL, PASSWORD);
 		userDTO = new UserDTO(ID, NAME, EMAIL, PASSWORD);
 	}
-	
+
 	private void solvedErrorServletRequestAttributes() {
 		MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 		ServletRequestAttributes requestAttributes = new ServletRequestAttributes(mockRequest);
