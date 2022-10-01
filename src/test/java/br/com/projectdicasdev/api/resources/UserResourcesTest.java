@@ -112,11 +112,25 @@ class UserResourcesTest {
 		assertNotNull(response.getHeaders().get("Location"));
 	}
 
-//	@Test
-//	void testAtualizar() {
-//		fail("Not yet implemented");
-//	}
-//
+	@Test
+	void whenUpdateThenReturnSucess() {
+		when(service.update(userDTO)).thenReturn(user);
+		when(mapper.map(any(), any())).thenReturn(userDTO);
+		
+		ResponseEntity<UserDTO> response = resource.atualizar(ID, userDTO);
+		
+		assertNotNull(response);
+		assertNotNull(response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(ResponseEntity.class, response.getClass());
+		assertEquals(UserDTO.class, response.getBody().getClass());
+		
+		
+		assertEquals(ID, response.getBody().getId());
+		assertEquals(NAME, response.getBody().getName());
+		assertEquals(EMAIL, response.getBody().getEmail());
+	}
+
 //	@Test
 //	void testAtualizacao() {
 //		fail("Not yet implemented");
