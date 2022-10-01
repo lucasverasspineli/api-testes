@@ -1,15 +1,21 @@
 package br.com.projectdicasdev.api.resources;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 
 import br.com.projectdicasdev.api.domain.User;
 import br.com.projectdicasdev.api.domain.dto.UserDTO;
@@ -49,34 +55,49 @@ class UserResourcesTest {
 	}
 
 	@Test
-	void testFindById() {
-		fail("Not yet implemented");
-	}
+	void whenFindByIdthenReturnSucess() {
+		when(service.findById(anyInt())).thenReturn(user);
+		when(mapper.map(any(), any())).thenReturn(userDTO);
+		
+		ResponseEntity<UserDTO> response = resource.findById(ID);
+		
+		assertNotNull(response);
+		assertNotNull(response.getBody());
+		assertEquals(ResponseEntity.class, response.getClass());
+		//Assegura que o Objeto que passar no corpo da requisição seja da classe UserDTO
+		assertEquals(UserDTO.class, response.getBody().getClass());
+		//Verificação dos dados no corpo da requisição
+		assertEquals(ID, response.getBody().getId());
+		assertEquals(NAME, response.getBody().getName());
+		assertEquals(EMAIL, response.getBody().getEmail());
+		assertEquals(PASSWORD, response.getBody().getPassword());
+		
+	} 
 
-	@Test
-	void testFindAll() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testCreate() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testAtualizar() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testAtualizacao() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testDelete() {
-		fail("Not yet implemented");
-	}
+//	@Test
+//	void testFindAll() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	void testCreate() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	void testAtualizar() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	void testAtualizacao() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	void testDelete() {
+//		fail("Not yet implemented");
+//	}
 
 	private void startInstance() {
 		user = new User(ID, NAME, EMAIL, PASSWORD);

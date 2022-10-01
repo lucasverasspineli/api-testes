@@ -56,10 +56,6 @@ public class UserServiceImpl implements UserService {
 		return userRepository.save(mapper.map(obj,User.class));
 	}
 	
-	public User atualizar(UserDTO obj) {
-		return userRepository.saveAndFlush(mapper.map(obj, User.class));
-	}
-	
 	@Override
 	public void delete(Integer id) {
 		findById(id);

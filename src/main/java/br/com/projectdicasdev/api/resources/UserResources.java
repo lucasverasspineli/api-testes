@@ -62,11 +62,6 @@ public class UserResources {
 		return ResponseEntity.ok().body(mapper.map(service.update(obj), UserDTO.class));	
 	}
 	
-	@PutMapping(value = "mod")
-	public ResponseEntity<UserDTO> atualizacao(@RequestBody UserDTO obj){
-		User newUser = service.atualizar(obj);
-		return ResponseEntity.ok().body(mapper.map(newUser, UserDTO.class));	
-	}
 	
 	@DeleteMapping(value = ID)
 	public ResponseEntity<UserDTO> delete(@PathVariable Integer id){
