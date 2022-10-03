@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -28,6 +29,7 @@ import br.com.projectdicasdev.api.domain.User;
 import br.com.projectdicasdev.api.domain.dto.UserDTO;
 import br.com.projectdicasdev.api.services.impl.UserServiceImpl;
 
+@SpringBootTest
 class UserResourcesTest {
 
 	private static final String JA_EXISTE_ESTE_EMAIL_CADASTRADO = "já existe este email cadastrado";
